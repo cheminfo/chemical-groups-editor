@@ -1,0 +1,63 @@
+{
+  "name": "chemical-groups",
+  "version": "2.2.3",
+  "description": "Chemical groups used in organic chemistry, like Ph, Tips or Ala",
+  "keywords": [
+    "chemistry",
+    "chemical groups",
+    "amino acids",
+    "nucleotides",
+    "molecular formula"
+  ],
+  "author": "Luc Patiny",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "workspaces": [
+    "dev"
+  ],
+  "scripts": {
+    "check-types": "tsc --noEmit && npm run check-types --workspace=chemical-groups-dev",
+    "clean": "rimraf coverage lib",
+    "dev": "npm run dev --workspace=chemical-groups-dev",
+    "eslint": "eslint .",
+    "eslint-fix": "eslint . --fix",
+    "prepack": "npm run tsc",
+    "prettier": "prettier --check .",
+    "prettier-write": "prettier --write .",
+    "test": "npm run test-only && npm run check-types && npm run eslint && npm run prettier",
+    "test-only": "vitest run --coverage",
+    "tsc": "npm run clean && npm run tsc-build",
+    "tsc-build": "tsc --project tsconfig.build.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheminfo/chemical-groups.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cheminfo/chemical-groups/issues"
+  },
+  "homepage": "https://github.com/cheminfo/chemical-groups#readme",
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "@vitest/coverage-istanbul": "^4.1.11",
+    "@zakodium/tsconfig": "^1.0.5",
+    "eslint": "^9.39.5",
+    "eslint-config-cheminfo-react": "^20.1.0",
+    "eslint-config-cheminfo-typescript": "^22.1.0",
+    "prettier": "^3.9.6",
+    "rimraf": "^6.1.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  }
+}

@@ -1,0 +1,195 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+/* blueprint focus selectors out-specify a plain `*:focus` reset */
+*:focus,
+*:focus-visible {
+  outline: none !important;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  padding: 8px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-path {
+  margin-left: auto;
+  color: #5f6b7c;
+  font-size: 12px;
+}
+
+.groups-layout {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  min-height: 0;
+}
+
+.group-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.group-list-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.group-list-filters .bp6-switch,
+.group-list-filters .bp6-tag {
+  flex-shrink: 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.group-list-scroll {
+  flex: 1;
+  overflow: auto;
+  border: 1px solid rgb(17 20 24 / 15%);
+  border-radius: 2px;
+}
+
+.group-list-scroll table {
+  width: 100%;
+}
+
+.group-list-scroll thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
+}
+
+.selected-row > td {
+  background: #d1e8ff !important;
+}
+
+.group-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+}
+
+.group-detail-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.group-detail-header h4 {
+  margin: 0;
+}
+
+.group-detail-columns {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.group-form .bp6-form-group {
+  margin-bottom: 6px;
+}
+
+.structure-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+
+.structure-editor {
+  height: 352px;
+  border: 1px solid rgb(17 20 24 / 15%);
+}
+
+.structure-hint {
+  color: #5f6b7c;
+  font-size: 12px;
+}
+
+.structure-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.structure-info .bp6-callout {
+  flex: 1 1 240px;
+}
+
+.structure-info .bp6-tag,
+.structure-info .bp6-button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.kind-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-bottom: 6px;
+}
+
+.json-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.json-editor {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid rgb(17 20 24 / 15%);
+}
+
+.invalid-mf {
+  color: #cd4246;
+}
+
+.issue-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.computed-table td:first-child {
+  color: #5f6b7c;
+}
+
+.mf-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+.mf-html {
+  padding-bottom: 8px;
+  font-size: 18px;
+}

@@ -1,0 +1,35 @@
+{
+  "name": "chemical-groups-dev",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Local playground to browse and edit the chemical groups",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check-types": "tsc --noEmit",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^6.18.0",
+    "@blueprintjs/icons": "^6.13.0",
+    "@codemirror/lang-json": "^6.0.2",
+    "@tanstack/react-virtual": "^3.14.10",
+    "@uiw/react-codemirror": "^4.25.11",
+    "chemical-groups": "file:..",
+    "mf-parser": "^3.9.2",
+    "openchemlib": "^9.25.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-mf": "^3.1.1",
+    "react-ocl": "^8.7.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@zakodium/tsconfig": "^1.0.5",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
+  }
+}
