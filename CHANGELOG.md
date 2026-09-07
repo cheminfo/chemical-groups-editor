@@ -5,6 +5,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 > Releases up to 2.2.3 were made from [cheminfo/mass-tools](https://github.com/cheminfo/mass-tools), where this package lived as `packages/chemical-groups`.
 
+## 1.0.0 (2026-09-07)
+
+
+### Features
+
+* type the kind of a group with the Kind union ([74cfe34](https://github.com/cheminfo/chemical-groups/commit/74cfe3476950ce50eaceda072cc8d5b397407f61))
+
 ## [2.2.3](https://github.com/cheminfo/mass-tools/compare/chemical-groups@2.2.2...chemical-groups@2.2.3) (2025-03-10)
 
 
