@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
 import { groups } from '../groups.ts';
-import type { Group } from '../types.ts';
+import type { Group, Kind } from '../types.ts';
 
 /**
  * Symbols of the groups that break an invariant.
@@ -45,8 +45,8 @@ function isSingleCharacter(value: string): boolean {
   return codePoint !== undefined && (codePoint < 0xd800 || codePoint > 0xdfff);
 }
 
-test('the list holds more than 300 groups', () => {
-  expect(groups.length).toBeGreaterThan(300);
+test('the list holds 298 groups', () => {
+  expect(groups).toHaveLength(298);
 });
 
 test('every symbol appears exactly once', () => {
@@ -140,6 +140,35 @@ test('a structure, when present, carries a non-empty idcode', () => {
   );
 
   expect(offenders).toStrictEqual([]);
+});
+
+const KINDS: Kind[] = [
+  'aa',
+  'DNA',
+  'DNAp',
+  'DNApp',
+  'DNAppp',
+  'RNA',
+  'RNAp',
+  'RNApp',
+  'RNAppp',
+  'RNApMod',
+  'RNAppMod',
+  'RNAEnd',
+];
+
+test('kind, when present, is one of the known kinds', () => {
+  const offenders = offendingSymbols(
+    (group) => group.kind === undefined || KINDS.includes(group.kind),
+  );
+
+  expect(offenders).toStrictEqual([]);
+});
+
+test('every kind is carried by at least one group', () => {
+  const used = new Set(groups.map((group) => group.kind));
+
+  expect(KINDS.filter((kind) => !used.has(kind))).toStrictEqual([]);
 });
 
 test('Gly is unchanged', () => {

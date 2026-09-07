@@ -64,7 +64,7 @@ function messageOf(run: () => unknown): string {
 test('readGroups parses the real src/groups.ts', () => {
   const groups = readGroups(realGroupsPath);
 
-  expect(groups.length).toBeGreaterThan(300);
+  expect(groups.length).toBeGreaterThan(250);
   expect(groups.at(0)?.symbol).toBe('Abu');
 
   const alanine = groups.find((group) => group.symbol === 'Ala');

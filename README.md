@@ -24,7 +24,7 @@ npm install chemical-groups
 import { groups, groupsObject, groupsToSequence } from 'chemical-groups';
 
 groups.length;
-// 304
+// 298
 
 groupsObject.Ala;
 // {
@@ -45,7 +45,7 @@ groupsToSequence('HOAlaGlyOH');
 // 'AG'
 ```
 
-The `Group`, `GroupElement` and `GroupOcl` types are exported as well.
+The `Group`, `GroupElement`, `GroupOcl` and `Kind` types are exported as well.
 
 ## The data
 
@@ -59,6 +59,28 @@ openchemlib atoms with their own atomic numbers (154, 142, 143, 144), so they
 appear in the structure but are excluded from `mf`. A monoradical uses `R`, a
 diradical `R1` on the amine side and `R2` on the carbonyl side, a triradical
 adds `R3` for the side chain.
+
+### Kinds
+
+`kind` says which family a group belongs to. The vocabulary is closed — the
+`Kind` type and the test suite both hold the list — and a group that is part of
+no biopolymer, such as a protecting group or a substituent, carries no kind.
+
+| Kind                | What it is                                         | Groups |
+| ------------------- | -------------------------------------------------- | ------ |
+| `aa`                | Amino acid residue                                 | 63     |
+| `DNA` / `RNA`       | Deoxyribonucleoside / ribonucleoside, no phosphate | 5 / 5  |
+| `DNAp` / `RNAp`     | The same, as monophosphate                         | 6 / 6  |
+| `DNApp` / `RNApp`   | As diphosphate                                     | 5 / 5  |
+| `DNAppp` / `RNAppp` | As triphosphate                                    | 5 / 5  |
+| `RNApMod`           | Modified ribonucleoside monophosphate, Modomics    | 135    |
+| `RNAppMod`          | The same as diphosphate: the 5′ caps               | 4      |
+| `RNAEnd`            | A 5′ end that terminates the chain                 | 4      |
+
+A group of one of the chain kinds carries the `R1` and `R2` that let it extend
+a chain; an `RNAEnd` carries a single attachment point, so it can only close
+one. That is what makes it its own kind — every other group is a di- or
+triradical.
 
 Every group is checked by the test suite: `mf` must be the formula of the
 structure with the R atoms removed, and `mass`, `monoisotopicMass`,

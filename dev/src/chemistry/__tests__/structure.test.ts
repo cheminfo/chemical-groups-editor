@@ -10,6 +10,8 @@ import {
 } from '../structure.ts';
 
 const ACETYL_IDCODE = 'gCaHDEeIi`@';
+/** Benzene: a whole molecule, so it carries no attachment point. */
+const BENZENE_IDCODE = 'gFp@DiTt@@@';
 const ACETYL_COORDINATES = '!BbOq~@Ha}';
 
 test('getMfFromStructure drops the R attachment points', () => {
@@ -40,7 +42,7 @@ test('countRAtoms counts the attachment points', () => {
   expect(countRAtoms(oclOf('Acet'))).toBe(1);
   expect(countRAtoms(oclOf('Ala'))).toBe(2);
   expect(countRAtoms(oclOf('Argp'))).toBe(3);
-  expect(countRAtoms(oclOf('Pqb'))).toBe(0);
+  expect(countRAtoms({ value: BENZENE_IDCODE })).toBe(0);
 });
 
 test('moleculeFromOcl rebuilds the atoms and the bonds', () => {

@@ -21,7 +21,7 @@ test('no group of the data carries an error', () => {
 
   expect(errors).toStrictEqual([]);
   expect([...duplicates]).toStrictEqual([]);
-  expect(groups.length).toBeGreaterThan(300);
+  expect(groups.length).toBeGreaterThan(250);
 });
 
 test('the warnings of the data are the ones that are known', () => {
@@ -45,11 +45,7 @@ test('the warnings of the data are the ones that are known', () => {
   }
 
   expect(unexpected).toStrictEqual([]);
-  expect(toVerify.toSorted()).toStrictEqual(['Hva', 'Stap']);
+  expect(toVerify).toStrictEqual([]);
   expect(withoutStructure.toSorted()).toStrictEqual(['Xle']);
-  expect(withoutAttachmentPoint.toSorted()).toStrictEqual([
-    'Pqb',
-    'Pqg',
-    'Qba',
-  ]);
+  expect(withoutAttachmentPoint).toStrictEqual([]);
 });

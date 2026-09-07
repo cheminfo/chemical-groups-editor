@@ -1,5 +1,4 @@
 import { Button, HTMLTable, InputGroup, Switch, Tag } from '@blueprintjs/core';
-import { useVirtualizer } from '@tanstack/react-virtual';
 import type { Group } from 'chemical-groups';
 import { useEffect, useMemo, useRef } from 'react';
 
@@ -9,9 +8,6 @@ import { GroupRow } from './GroupRow.tsx';
 import { KindFilter } from './KindFilter.tsx';
 import { countByKind, kindColor, matchesKind } from './kinds.ts';
 
-/** Height of a row, structure included, before it is measured */
-const ROW_HEIGHT = 82;
-
 interface GroupListProps {
   groups: Group[];
   duplicates: Set<string>;
@@ -19,8 +15,8 @@ interface GroupListProps {
   onSelect: (index: number) => void;
   search: string;
   onSearchChange: (search: string) => void;
-  kinds: Set<string>;
-  onKindsChange: (kinds: Set<string>) => void;
+  kind: string | null;
+  onKindChange: (kind: string | null) => void;
   onlyIssues: boolean;
   onOnlyIssuesChange: (onlyIssues: boolean) => void;
   onlyToVerify: boolean;
@@ -28,8 +24,9 @@ interface GroupListProps {
 }
 
 /**
- * Filterable table of all the groups of `groups.ts`. Only the visible rows are
- * rendered: drawing the 300 structures at once takes seconds.
+ * Filterable table of all the groups of `groups.ts`. The rows are all
+ * rendered, but each one only draws its structure once it is scrolled into
+ * view: drawing the 300 structures at once takes seconds.
  * @param props - Groups to list, the current filters and the selection callbacks.
  * @returns The kind filter, the search filters and the virtualized table.
  */
@@ -41,8 +38,8 @@ export function GroupList(props: GroupListProps) {
     onSelect,
     search,
     onSearchChange,
-    kinds,
-    onKindsChange,
+    kind,
+    onKindChange,
     onlyIssues,
     onOnlyIssuesChange,
     onlyToVerify,
@@ -70,7 +67,7 @@ export function GroupList(props: GroupListProps) {
     for (let index = 0; index < groups.length; index++) {
       const group = groups[index] as Group;
       if (lowerCaseSearch && !matches(group, lowerCaseSearch)) continue;
-      if (!matchesKind(group, kinds)) continue;
+      if (!matchesKind(group, kind)) continue;
       if (onlyToVerify && !group.toVerify) continue;
       const errors = getIssues(group, duplicates).filter(
         (issue) => issue.level === 'error',
@@ -79,30 +76,13 @@ export function GroupList(props: GroupListProps) {
       result.push({ group, index, errors });
     }
     return result;
-  }, [groups, duplicates, search, kinds, onlyIssues, onlyToVerify]);
-
-  const virtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => scrollRef.current,
-    estimateSize: () => ROW_HEIGHT,
-    overscan: 6,
-  });
-
-  const virtualRows = virtualizer.getVirtualItems();
-  const paddingTop = virtualRows[0]?.start ?? 0;
-  const paddingBottom =
-    virtualizer.getTotalSize() - (virtualRows.at(-1)?.end ?? 0);
+  }, [groups, duplicates, search, kind, onlyIssues, onlyToVerify]);
 
   useKeyboardNavigation(rows, selectedIndex, onSelect);
 
-  const position = rows.findIndex((row) => row.index === selectedIndex);
-  useEffect(() => {
-    if (position !== -1) virtualizer.scrollToIndex(position);
-  }, [position, virtualizer]);
-
   return (
     <div className="group-list">
-      <KindFilter groups={groups} kinds={kinds} onChange={onKindsChange} />
+      <KindFilter groups={groups} selected={kind} onChange={onKindChange} />
       <div className="group-list-filters">
         <InputGroup
           fill
@@ -138,28 +118,17 @@ export function GroupList(props: GroupListProps) {
             </tr>
           </thead>
           <tbody>
-            {paddingTop > 0 ? <tr style={{ height: paddingTop }} /> : null}
-            {virtualRows.map((virtualRow) => {
-              const row = rows[virtualRow.index];
-              if (!row) return null;
-              return (
-                <GroupRow
-                  key={row.index}
-                  group={row.group}
-                  errors={row.errors}
-                  color={
-                    row.group.kind ? colors.get(row.group.kind) : undefined
-                  }
-                  selected={row.index === selectedIndex}
-                  onSelect={() => onSelect(row.index)}
-                  dataIndex={virtualRow.index}
-                  measureRef={virtualizer.measureElement}
-                />
-              );
-            })}
-            {paddingBottom > 0 ? (
-              <tr style={{ height: paddingBottom }} />
-            ) : null}
+            {rows.map((row) => (
+              <GroupRow
+                key={row.index}
+                group={row.group}
+                errors={row.errors}
+                color={row.group.kind ? colors.get(row.group.kind) : undefined}
+                selected={row.index === selectedIndex}
+                onSelect={() => onSelect(row.index)}
+                scrollRef={scrollRef}
+              />
+            ))}
           </tbody>
         </HTMLTable>
       </div>

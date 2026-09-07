@@ -146,25 +146,24 @@ test('updateGroup drops an optional field that was emptied', () => {
 });
 
 test('updateGroup drops the toVerify flag once it is unset', () => {
-  const statine = groupBySymbol('Stap');
+  const toVerify = { ...groupBySymbol('Abu'), toVerify: true };
 
-  expect(statine.toVerify).toBe(true);
-
-  const verified = updateGroup(statine, { toVerify: false });
+  const verified = updateGroup(toVerify, { toVerify: false });
 
   expect(verified.toVerify).toBeUndefined();
   expect(Object.keys(verified)).toStrictEqual([
     'symbol',
     'name',
     'mf',
+    'kind',
     'ocl',
     'mass',
     'monoisotopicMass',
     'unsaturation',
     'elements',
   ]);
-  expect(verified.mf).toBe(statine.mf);
-  expect(verified.mass).toBe(statine.mass);
+  expect(verified.mf).toBe(toVerify.mf);
+  expect(verified.mass).toBe(toVerify.mass);
 });
 
 test('createGroup builds a group whose fields match its formula', () => {

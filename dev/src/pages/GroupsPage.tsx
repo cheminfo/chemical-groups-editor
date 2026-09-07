@@ -23,7 +23,7 @@ export function GroupsPage(props: GroupsPageProps) {
   const { status, error, message, path, saved, groups, setGroups } = file;
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [search, setSearch] = useState('');
-  const [kinds, setKinds] = useState<Set<string>>(new Set());
+  const [kind, setKind] = useState<string | null>(null);
   const [onlyIssues, setOnlyIssues] = useState(false);
   const [onlyToVerify, setOnlyToVerify] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -81,8 +81,8 @@ export function GroupsPage(props: GroupsPageProps) {
           onSelect={setSelectedIndex}
           search={search}
           onSearchChange={setSearch}
-          kinds={kinds}
-          onKindsChange={setKinds}
+          kind={kind}
+          onKindChange={setKind}
           onlyIssues={onlyIssues}
           onOnlyIssuesChange={setOnlyIssues}
           onlyToVerify={onlyToVerify}

@@ -1,7 +1,23 @@
-import type { Group } from 'chemical-groups';
+import type { Group, Kind } from 'chemical-groups';
 
 /** Value used for the groups that have no `kind` */
 export const NO_KIND = '—';
+
+/** The closed vocabulary of `kind`, in the order the selector offers it */
+export const KINDS: Kind[] = [
+  'aa',
+  'DNA',
+  'DNAp',
+  'DNApp',
+  'DNAppp',
+  'RNA',
+  'RNAp',
+  'RNApp',
+  'RNAppp',
+  'RNApMod',
+  'RNAppMod',
+  'RNAEnd',
+];
 
 /** Blueprint palette, one color per kind, in the order the kinds are listed */
 const COLORS = [
@@ -22,12 +38,12 @@ const COLORS = [
 /**
  * Whether a group passes the kind filter.
  * @param group - Group to test.
- * @param kinds - Selected kinds, empty means all of them.
- * @returns `true` when the kind of the group is selected.
+ * @param kind - Selected kind, `null` means all of them.
+ * @returns `true` when the group carries the selected kind.
  */
-export function matchesKind(group: Group, kinds: Set<string>): boolean {
-  if (kinds.size === 0) return true;
-  return kinds.has(group.kind ?? NO_KIND);
+export function matchesKind(group: Group, kind: string | null): boolean {
+  if (kind === null) return true;
+  return (group.kind ?? NO_KIND) === kind;
 }
 
 /**

@@ -59,8 +59,15 @@ body,
   padding-bottom: 4px;
 }
 
+.group-list-filters .bp6-input-group {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 24rem;
+}
+
 .group-list-filters .bp6-switch,
-.group-list-filters .bp6-tag {
+.group-list-filters .bp6-tag,
+.group-list-filters .bp6-button {
   flex-shrink: 0;
   margin: 0;
   white-space: nowrap;
@@ -86,6 +93,12 @@ body,
 
 .selected-row > td {
   background: #d1e8ff !important;
+}
+
+/* Keeps the row height stable while the structure has not been drawn yet. */
+.structure-cell {
+  width: 110px;
+  height: 70px;
 }
 
 .group-detail {

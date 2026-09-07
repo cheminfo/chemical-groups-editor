@@ -14,7 +14,6 @@
     "@blueprintjs/core": "^6.18.0",
     "@blueprintjs/icons": "^6.13.0",
     "@codemirror/lang-json": "^6.0.2",
-    "@tanstack/react-virtual": "^3.14.10",
     "@uiw/react-codemirror": "^4.25.11",
     "chemical-groups": "file:..",
     "mf-parser": "^3.9.2",

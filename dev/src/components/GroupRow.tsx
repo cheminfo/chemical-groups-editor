@@ -1,6 +1,7 @@
 import { Icon, Tag } from '@blueprintjs/core';
 import type { Group } from 'chemical-groups';
-import { memo } from 'react';
+import type { RefObject } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { IdcodeSvgRenderer } from 'react-ocl';
 
 import { MfDisplay } from './MfDisplay.tsx';
@@ -13,10 +14,8 @@ interface GroupRowProps {
   color: string | undefined;
   selected: boolean;
   onSelect: () => void;
-  /** Position of the row in the virtualized list */
-  dataIndex: number;
-  /** Callback of the virtualizer, to measure the real height of the row */
-  measureRef: (element: HTMLElement | null) => void;
+  /** Scrolling container of the list, root of the visibility observer */
+  scrollRef: RefObject<HTMLElement | null>;
 }
 
 /**
@@ -24,12 +23,17 @@ interface GroupRowProps {
  * the expensive part of the list.
  */
 export const GroupRow = memo(function GroupRow(props: GroupRowProps) {
-  const { group, errors, color, selected, onSelect, dataIndex, measureRef } =
-    props;
+  const { group, errors, color, selected, onSelect, scrollRef } = props;
+  const rowRef = useRef<HTMLTableRowElement>(null);
+  const drawStructure = useHasBeenVisible(rowRef, scrollRef);
+
+  useEffect(() => {
+    if (selected) rowRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [selected]);
+
   return (
     <tr
-      ref={measureRef}
-      data-index={dataIndex}
+      ref={rowRef}
       className={selected ? 'selected-row' : undefined}
       onClick={onSelect}
     >
@@ -49,16 +53,18 @@ export const GroupRow = memo(function GroupRow(props: GroupRowProps) {
         <MfDisplay mf={group.mf} />
       </td>
       <td>
-        {group.ocl ? (
-          <IdcodeSvgRenderer
-            idcode={group.ocl.value}
-            coordinates={group.ocl.coordinates}
-            width={110}
-            height={70}
-            autoCrop
-            autoCropMargin={2}
-          />
-        ) : null}
+        <div className="structure-cell">
+          {group.ocl && drawStructure ? (
+            <IdcodeSvgRenderer
+              idcode={group.ocl.value}
+              coordinates={group.ocl.coordinates}
+              width={110}
+              height={70}
+              autoCrop
+              autoCropMargin={2}
+            />
+          ) : null}
+        </div>
       </td>
       <td>
         {errors > 0 ? (
@@ -68,3 +74,35 @@ export const GroupRow = memo(function GroupRow(props: GroupRowProps) {
     </tr>
   );
 });
+
+/**
+ * Whether the row has been scrolled into view at least once. Drawing the 300
+ * structures at once takes seconds, so a row only draws its own once it is
+ * reached, and keeps it afterwards so that scrolling back is instant.
+ * @param rowRef - Reference to the row to watch.
+ * @param scrollRef - Reference to the scrolling container. It has to be the
+ * root of the observer: a margin around the viewport would be cancelled by the
+ * container clipping the rows it scrolls.
+ * @returns `true` once the row has come close to the visible part of the list.
+ */
+function useHasBeenVisible(
+  rowRef: RefObject<HTMLElement | null>,
+  scrollRef: RefObject<HTMLElement | null>,
+): boolean {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const row = rowRef.current;
+    if (!row || visible) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) setVisible(true);
+      },
+      { root: scrollRef.current, rootMargin: '300px' },
+    );
+    observer.observe(row);
+    return () => observer.disconnect();
+  }, [rowRef, scrollRef, visible]);
+
+  return visible;
+}

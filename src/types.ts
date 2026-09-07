@@ -1,3 +1,29 @@
+/**
+ * The family a group belongs to. A group that is not part of a biopolymer —
+ * a protecting group, a substituent, an isotope — carries no kind.
+ *
+ * - `aa` — amino acid residue, the unit a peptide chain is made of.
+ * - `DNA` / `RNA` — deoxyribonucleoside / ribonucleoside, no phosphate.
+ * - `…p` / `…pp` / `…ppp` — the same, as mono-, di- and triphosphate.
+ * - `RNApMod` / `RNAppMod` — modified ribonucleotide, from Modomics. The
+ *   diphosphates are the 5′ caps, joined by a 5′-5′ phosphate bridge.
+ * - `RNAEnd` — a 5′ end. The only monoradicals: they close a chain where every
+ *   other kind extends it.
+ */
+export type Kind =
+  | 'aa'
+  | 'DNA'
+  | 'DNAp'
+  | 'DNApp'
+  | 'DNAppp'
+  | 'RNA'
+  | 'RNAp'
+  | 'RNApp'
+  | 'RNAppp'
+  | 'RNApMod'
+  | 'RNAppMod'
+  | 'RNAEnd';
+
 export interface GroupOcl {
   /** OCL idcode of the structure, R atoms included */
   value: string;
@@ -20,8 +46,8 @@ export interface Group {
   name: string;
   /** Molecular formula of the group, without the R atoms */
   mf: string;
-  /** `aa`, `DNA`, `RNA`, … */
-  kind?: string;
+  /** Family of the group, absent on the groups that belong to none */
+  kind?: Kind;
   /** One letter code, for the groups that have one, like `A` for `Ala` */
   oneLetter?: string;
   /** Second one letter code, like `α` for `Ala` */

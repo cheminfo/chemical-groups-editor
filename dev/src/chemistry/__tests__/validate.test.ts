@@ -4,6 +4,9 @@ import { expect, test } from 'vitest';
 
 import { analyzeGroup, getDuplicateSymbols, getIssues } from '../validate.ts';
 
+/** Benzene: a whole molecule, so it carries no attachment point. */
+const BENZENE_IDCODE = 'gFp@DiTt@@@';
+
 const ALANINE_DERIVED = {
   mass: 71.07801959624871,
   monoisotopicMass: 71.03711378515,
@@ -115,8 +118,8 @@ test('a group without a structure gives the no structure warning', () => {
 });
 
 test('a group flagged toVerify gives the warning that asks for a check', () => {
-  const statine = groupBySymbol('Stap');
-  const analysis = analyzeGroup(statine);
+  const toVerify = { ...groupBySymbol('Abu'), toVerify: true };
+  const analysis = analyzeGroup(toVerify);
 
   expect(analysis.issues).toStrictEqual([
     {
@@ -124,12 +127,24 @@ test('a group flagged toVerify gives the warning that asks for a check', () => {
       message: 'the structure was generated and still has to be checked',
     },
   ]);
-  expect(analysis.mfFromStructure).toBe('C8H14NO2');
-  expect(analysis.rAtoms).toBe(3);
+  expect(analysis.mfFromStructure).toBe('C4H7NO');
+  expect(analysis.rAtoms).toBe(2);
 });
 
 test('a structure without an R atom gives a warning', () => {
-  const analysis = analyzeGroup(groupBySymbol('Pqb'));
+  const analysis = analyzeGroup({
+    symbol: 'Bnz',
+    name: 'Benzene',
+    mf: 'C6H6',
+    ocl: { value: BENZENE_IDCODE },
+    mass: 78.11205990474615,
+    monoisotopicMass: 78.04695019338,
+    unsaturation: 6,
+    elements: [
+      { symbol: 'C', number: 6 },
+      { symbol: 'H', number: 6 },
+    ],
+  });
 
   expect(analysis.issues).toStrictEqual([
     {
@@ -137,7 +152,7 @@ test('a structure without an R atom gives a warning', () => {
       message: 'the structure has no R attachment point',
     },
   ]);
-  expect(analysis.mfFromStructure).toBe('C7H5N5O');
+  expect(analysis.mfFromStructure).toBe('C6H6');
   expect(analysis.rAtoms).toBe(0);
 });
 
