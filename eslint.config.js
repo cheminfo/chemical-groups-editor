@@ -4,12 +4,4 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import react from 'eslint-config-cheminfo-react/base';
 import ts from 'eslint-config-cheminfo-typescript';
 
-export default defineConfig(
-  // `src/groups.ts` is a single line of generated JSON, see `.prettierignore`.
-  globalIgnores(['coverage', 'dev/dist', 'lib', 'src/groups.ts']),
-  ts,
-  {
-    files: ['dev/**'],
-    extends: [react],
-  },
-);
+export default defineConfig(globalIgnores(['coverage', 'dist']), ts, react);

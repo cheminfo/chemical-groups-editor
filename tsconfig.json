@@ -1,9 +1,9 @@
 {
-  "extends": "@zakodium/tsconfig",
+  "extends": "@zakodium/tsconfig/jsx",
   "compilerOptions": {
+    "noEmit": true,
     "noUncheckedIndexedAccess": true,
-    "outDir": "lib",
-    "types": ["node"]
+    "types": ["node", "vite/client"]
   },
-  "include": ["src", "vite*.ts"]
+  "include": ["src", "server", "vite.config.ts", "vitest.config.ts"]
 }
